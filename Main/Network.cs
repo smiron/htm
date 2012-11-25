@@ -23,6 +23,12 @@ namespace Main
             private set;
         }
 
+        public int MinOverlap
+        {
+            get;
+            private set;
+        }
+
         #endregion
 
         #region Methods
@@ -32,7 +38,7 @@ namespace Main
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public object Process(object input)
+        public object Process(SpatialPoolerInput input)
         {
             return m_temporalPooler.Process(m_spatialPooler.Process(input));
         }
@@ -41,9 +47,10 @@ namespace Main
 
         #region Instance
 
-        public Network(float minPermanence)
+        public Network(float minPermanence, int minOverlap)
         {
             MinPermanence = minPermanence;
+            MinOverlap = minOverlap;
 
             m_spatialPooler = new SpatialPooler(this);
         }

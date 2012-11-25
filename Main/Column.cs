@@ -11,7 +11,17 @@ namespace Main
         #region Fields
 
         private SpatialPooler m_spatialPooler;
-        private List<Synapse> m_synapses;
+        private IEnumerable<Synapse> m_synapses;
+
+        #endregion
+
+        #region Properties
+
+        public int Boost
+        {
+            get;
+            private set;
+        }
 
         #endregion
 
@@ -22,9 +32,17 @@ namespace Main
             return m_synapses.Where(synapse => synapse.Permanence >= m_spatialPooler.Network.MinPermanence);
         }
 
+        /// <summary>
+        /// Implements Spatial Pooler Phase 1: Overlap
+        /// </summary>
+        /// <returns>The actual overlap value</returns>
         public int GetOverlap()
         {
-            return 0;
+            var overlap = GetConnectedSynapses().Sum(synapse => synapse.CurrentValue ? 1 : 0);
+
+            return overlap < m_spatialPooler.Network.MinOverlap
+                ? 0
+                : overlap * Boost;
         }
 
         #endregion

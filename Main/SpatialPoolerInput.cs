@@ -9,7 +9,7 @@ namespace Main
 {
     public class SpatialPoolerInput
     {
-        public IEnumerable<BitArray> Values
+        public BitMatrix Values
         {
             get;
             set;
