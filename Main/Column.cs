@@ -29,7 +29,7 @@ namespace Main
 
         private IEnumerable<Synapse> GetConnectedSynapses()
         {
-            return m_synapses.Where(synapse => synapse.Permanence >= m_spatialPooler.Network.MinPermanence);
+            return m_synapses.Where(synapse => synapse.Permanence >= m_spatialPooler.MinPermanence);
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Main
         {
             var overlap = GetConnectedSynapses().Sum(synapse => synapse.CurrentValue ? 1 : 0);
 
-            return overlap < m_spatialPooler.Network.MinOverlap
+            return overlap < m_spatialPooler.MinOverlap
                 ? 0
                 : overlap * Boost;
         }

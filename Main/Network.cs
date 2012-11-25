@@ -15,22 +15,6 @@ namespace Main
 
         #endregion
 
-        #region Properties
-
-        public float MinPermanence
-        {
-            get;
-            private set;
-        }
-
-        public int MinOverlap
-        {
-            get;
-            private set;
-        }
-
-        #endregion
-
         #region Methods
 
         /// <summary>
@@ -47,12 +31,9 @@ namespace Main
 
         #region Instance
 
-        public Network(float minPermanence, int minOverlap)
+        public Network(float minPermanence, int minOverlap, int desiredLocalActivity)
         {
-            MinPermanence = minPermanence;
-            MinOverlap = minOverlap;
-
-            m_spatialPooler = new SpatialPooler(this);
+            m_spatialPooler = new SpatialPooler(minPermanence, minOverlap, desiredLocalActivity);
         }
 
         #endregion

@@ -22,7 +22,19 @@ namespace Main
             private set;
         }
 
-        public Network Network
+        public float MinPermanence
+        {
+            get;
+            private set;
+        }
+
+        public int MinOverlap
+        {
+            get;
+            private set;
+        }
+
+        public int DesiredLocalActivity
         {
             get;
             private set;
@@ -52,9 +64,11 @@ namespace Main
 
         #region Instance
 
-        public SpatialPooler(Network network)
+        public SpatialPooler(float minPermanence, int minOverlap, int desiredLocalActivity)
         {
-            Network = network;
+            MinPermanence = minPermanence;
+            MinOverlap = minOverlap;
+            DesiredLocalActivity = desiredLocalActivity;
         }
 
         #endregion
