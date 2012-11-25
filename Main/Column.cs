@@ -11,25 +11,34 @@ namespace Main
         #region Fields
 
         private SpatialPooler m_spatialPooler;
-        private IEnumerable<Synapse> m_synapses;
+        
+        private double m_activeDutyCycle;
+        private double m_stagingActiveDutyCycle;
+        private double m_boost;
+
+        /// <summary>
+        /// A sliding average representing how often column c has had significant overlap (i.e. greater than minOverlap) 
+        /// with its inputs (e.g. over the last 1000 iterations).
+        /// </summary>
+        private double m_overlapDutyCycle;
 
         #endregion
 
         #region Properties
 
-        public int Boost
+        public List<Synapse> Synapses
         {
             get;
             private set;
         }
 
-        public int X
+        public int ColumnX
         {
             get;
             private set;
         }
 
-        public int Y
+        public int ColumnY
         {
             get;
             private set;
@@ -41,7 +50,7 @@ namespace Main
 
         private IEnumerable<Synapse> GetConnectedSynapses()
         {
-            return m_synapses.Where(synapse => synapse.Permanence >= m_spatialPooler.MinPermanence);
+            return Synapses.Where(synapse => synapse.Permanence >= m_spatialPooler.MinPermanence);
         }
 
         private int GetMinLocalActivity()
@@ -72,18 +81,18 @@ namespace Main
         /// <returns></returns>
         private IEnumerable<Column> GetNeighbors()
         {
-            double minX = Math.Max(X - m_spatialPooler.InhibitionRadius, 0);
-            double maxX = Math.Min(X + m_spatialPooler.InhibitionRadius, m_spatialPooler.CurrentInput.Values.ColumnCount);
+            double minX = Math.Max(ColumnX - m_spatialPooler.InhibitionRadius, 0);
+            double maxX = Math.Min(ColumnX + m_spatialPooler.InhibitionRadius, m_spatialPooler.CurrentInput.Values.ColumnCount);
 
-            double minY = Math.Max(Y - m_spatialPooler.InhibitionRadius, 0);
-            double maxY = Math.Min(Y + m_spatialPooler.InhibitionRadius, m_spatialPooler.CurrentInput.Values.RowCount);
+            double minY = Math.Max(ColumnY - m_spatialPooler.InhibitionRadius, 0);
+            double maxY = Math.Min(ColumnY + m_spatialPooler.InhibitionRadius, m_spatialPooler.CurrentInput.Values.RowCount);
 
             return m_spatialPooler.Columns.
                 Where(column => column != this
-                                && column.X >= minX
-                                && column.X < maxX
-                                && column.Y >= minY
-                                && column.Y < maxY);
+                                && column.ColumnX >= minX
+                                && column.ColumnX < maxX
+                                && column.ColumnY >= minY
+                                && column.ColumnY < maxY);
         }
 
         /// <summary>
@@ -95,20 +104,93 @@ namespace Main
             var overlap = GetConnectedSynapses().Sum(synapse => synapse.CurrentValue ? 1 : 0);
 
             return overlap < m_spatialPooler.MinOverlap
-                ? 0
-                : overlap * Boost;
+                   ? 0
+                   : (int)(overlap * m_boost);
         }
 
         /// <summary>
         /// Implements Spatial Pooler Phase 2: Inhibition
         /// </summary>
         /// <returns></returns>
-        public bool GetActive()
+        private bool GetActive()
         {
             var overlap = GetOverlap();
 
             return overlap > 0
                    && overlap >= GetMinLocalActivity();
+        }
+
+        public void Process()
+        {
+            Synapses.ForEach(synapse => synapse.Process());
+
+            var minDutyCycle = 0.01 * GetMaxDutyCycle(GetNeighbors());
+
+            m_stagingActiveDutyCycle = GetUpdatedActiveDutyCycle();
+
+            m_boost = GetUpdatedBoost(m_stagingActiveDutyCycle, minDutyCycle);
+
+
+            m_overlapDutyCycle = GetUpdatedOverlapDutyCycle();
+            if (m_overlapDutyCycle < minDutyCycle)
+            {
+                IncreasePermanences(0.1 * m_spatialPooler.MinPermanence);
+            }
+        }
+
+        /// <summary>
+        /// Increase the permanence value of every synapse in column c by a scale factor s.
+        /// </summary>
+        /// <param name="amount"></param>
+        private void IncreasePermanences(double scale)
+        {
+            Synapses.ForEach(synapse => synapse.IncreasePermanence(scale));
+        }
+
+        /// <summary>
+        /// Returns the boost value of a column. 
+        /// The boost value is a scalar >= 1. If activeDutyCyle(c) is above minDutyCycle(c), the boost value is 1. 
+        /// The boost increases linearly once the column's activeDutyCyle starts falling below its minDutyCycle.
+        /// </summary>
+        /// <returns></returns>
+        private double GetUpdatedBoost(double activeDutyCycle, double minDutyCycle)
+        {
+            return activeDutyCycle > minDutyCycle
+                   ? 1
+                   : minDutyCycle / activeDutyCycle;
+        }
+
+        /// <summary>
+        /// Computes a moving average of how often column c has overlap greater than minOverlap.
+        /// </summary>
+        /// <returns></returns>
+        private double GetUpdatedOverlapDutyCycle()
+        {
+            return (m_overlapDutyCycle * (m_spatialPooler.ColumnActivityHistorySize - 1) + (GetActive() ? 1 : 0)) / m_spatialPooler.ColumnActivityHistorySize;
+        }
+
+        /// <summary>
+        /// Call this function after all the columns have been procesed
+        /// </summary>
+        public void PostProcess()
+        {
+            // update ActiveDutyCicle according to the latest GetActive() value
+            m_activeDutyCycle = m_stagingActiveDutyCycle;
+        }
+
+        private double GetUpdatedActiveDutyCycle()
+        {
+            return (m_activeDutyCycle * (m_spatialPooler.ColumnActivityHistorySize - 1) + (GetActive() ? 1 : 0)) / m_spatialPooler.ColumnActivityHistorySize;
+        }
+
+        /// <summary>
+        /// Returns the maximum active duty cycle of the columns in the given list of columns.
+        /// </summary>
+        /// <param name="neighbors"></param>
+        /// <returns></returns>
+        private double GetMaxDutyCycle(IEnumerable<Column> neighbors)
+        {
+            return neighbors.Select(neighbor => neighbor.m_activeDutyCycle).Max();
         }
 
         #endregion

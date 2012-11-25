@@ -31,9 +31,11 @@ namespace Main
 
         #region Instance
 
-        public Network(float minPermanence, int minOverlap, int desiredLocalActivity)
+        public Network(float minPermanence, int minOverlap, int desiredLocalActivity,
+            double permanenceInc, double permanenceDec, int columnActivityHistorySize)
         {
-            m_spatialPooler = new SpatialPooler(minPermanence, minOverlap, desiredLocalActivity);
+            m_spatialPooler = new SpatialPooler(minPermanence, minOverlap, desiredLocalActivity,
+                permanenceInc, permanenceDec, columnActivityHistorySize);
         }
 
         #endregion

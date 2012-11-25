@@ -13,15 +13,54 @@ namespace Main
         private SpatialPooler m_spatialPooler;
         private int m_x;
         private int m_y;
+        private double m_permanence;
 
         #endregion
 
         #region Properties
 
-        public double Permanence
+        /// <summary>
+        /// The X coordonate of the input
+        /// </summary>
+        public int SynapseX
         {
             get;
-            set;
+            private set;
+        }
+
+        /// <summary>
+        /// The Y coordonate of the input
+        /// </summary>
+        public int SynapseY
+        {
+            get;
+            private set;
+        }
+
+        public double Permanence
+        {
+            get
+            {
+                return m_permanence;
+            }
+            private set
+            {
+                lock (this)
+                {
+                    if (value < 0)
+                    {
+                        m_permanence = 0;
+                    }
+                    else if (value > 1)
+                    {
+                        m_permanence = 1;
+                    }
+                    else
+                    {
+                        m_permanence = value;
+                    }
+                }
+            }
         }
 
         public bool CurrentValue
@@ -34,13 +73,39 @@ namespace Main
 
         #endregion
 
+        #region Methods
+
+        public void Process()
+        {
+            if (CurrentValue)
+            {
+                Permanence += m_spatialPooler.PermanenceInc;
+            }
+            else
+            {
+                Permanence -= m_spatialPooler.PermanenceDec;
+            }
+        }
+
+        /// <summary>
+        /// Increase the permanence value of the synapse by a scale factor s.
+        /// </summary>
+        /// <param name="scale"></param>
+        public void IncreasePermanence(double scale)
+        {
+            Permanence *= scale;
+        }
+
+        #endregion
+
         #region Instance
 
-        public Synapse(SpatialPooler spatialPooler, int x, int y)
+        public Synapse(SpatialPooler spatialPooler, int x, int y, double permanence)
         {
             m_spatialPooler = spatialPooler;
             m_x = x;
             m_y = y;
+            Permanence = permanence;
         }
 
         #endregion
