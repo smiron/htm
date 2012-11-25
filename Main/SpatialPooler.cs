@@ -8,6 +8,12 @@ namespace Main
 {
     public class SpatialPooler
     {
+        #region Fields
+
+        private SpatialPoolerInput m_currentInput;
+
+        #endregion
+
         #region Properties
 
         public IEnumerable<Column> Columns
@@ -18,8 +24,14 @@ namespace Main
 
         public SpatialPoolerInput CurrentInput
         {
-            get;
-            private set;
+            get
+            {
+                return m_currentInput;
+            }
+            private set
+            {
+                m_currentInput = value;
+            }
         }
 
         public float MinPermanence

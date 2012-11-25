@@ -32,6 +32,21 @@ namespace Main
             return m_synapses.Where(synapse => synapse.Permanence >= m_spatialPooler.MinPermanence);
         }
 
+        private int GetMinLocalActivity()
+        {
+            return kthScore(GetNeighbors(), m_spatialPooler.DesiredLocalActivity);
+        }
+
+        private int kthScore(IEnumerable<Column> neighbors, int desiredLocalActivity)
+        {
+            throw new NotImplementedException();
+        }
+
+        private IEnumerable<Column> GetNeighbors()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Implements Spatial Pooler Phase 1: Overlap
         /// </summary>
@@ -43,6 +58,18 @@ namespace Main
             return overlap < m_spatialPooler.MinOverlap
                 ? 0
                 : overlap * Boost;
+        }
+
+        /// <summary>
+        /// Implements Spatial Pooler Phase 2: Inhibition
+        /// </summary>
+        /// <returns></returns>
+        public bool GetActive()
+        {
+            var overlap = GetOverlap();
+
+            return overlap > 0
+                   && overlap >= GetMinLocalActivity();
         }
 
         #endregion
