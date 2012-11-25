@@ -17,6 +17,18 @@ namespace Main
 
         #region Properties
 
+        public int RowCount
+        {
+            get;
+            private set;
+        }
+
+        public int ColumnCount
+        {
+            get;
+            private set;
+        }
+
         public bool this[int x, int y]
         {
             get
@@ -53,12 +65,15 @@ namespace Main
 
         #region Instance
 
-        public BitMatrix(int numRows, int numColumns)
+        public BitMatrix(int rowCount, int columnCount)
         {
+            RowCount = rowCount;
+            ColumnCount = columnCount;
+
             _rows = new List<BitArray>();
-            for (int i = 0; i < numRows; i++)
+            for (int i = 0; i < rowCount; i++)
             {
-                _rows.Add(new BitArray(numColumns));
+                _rows.Add(new BitArray(columnCount));
             }
         }
 

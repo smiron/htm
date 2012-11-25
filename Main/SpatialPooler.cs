@@ -34,7 +34,7 @@ namespace Main
             }
         }
 
-        public float MinPermanence
+        public double MinPermanence
         {
             get;
             private set;
@@ -47,6 +47,16 @@ namespace Main
         }
 
         public int DesiredLocalActivity
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Average connected receptive field size of the columns.
+        /// </summary>
+        /// <returns></returns>
+        public double InhibitionRadius
         {
             get;
             private set;

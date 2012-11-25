@@ -23,6 +23,18 @@ namespace Main
             private set;
         }
 
+        public int X
+        {
+            get;
+            private set;
+        }
+
+        public int Y
+        {
+            get;
+            private set;
+        }
+
         #endregion
 
         #region Methods
@@ -37,21 +49,48 @@ namespace Main
             return kthScore(GetNeighbors(), m_spatialPooler.DesiredLocalActivity);
         }
 
+        /// <summary>
+        /// Given the list of columns, return the k'th highest overlap value.
+        /// TODO: improve code speed by eliminating the extra GetOverlap() call
+        /// </summary>
+        /// <param name="neighbors">The column neighbors</param>
+        /// <param name="desiredLocalActivity">A parameter controlling the number of columns that will be winners after the inhibition step.</param>
+        /// <returns></returns>
         private int kthScore(IEnumerable<Column> neighbors, int desiredLocalActivity)
         {
-            throw new NotImplementedException();
+            var neighborsOverlap = neighbors.Select(neighbor => neighbor.GetOverlap()).
+                OrderByDescending(overlap => overlap).ToArray();
+
+            return neighborsOverlap.Length < desiredLocalActivity
+                ? neighborsOverlap.Last()
+                : neighborsOverlap.Skip(desiredLocalActivity - 1).First();
         }
 
+        /// <summary>
+        /// A list of all the columns that are within inhibitionRadius of column.
+        /// </summary>
+        /// <returns></returns>
         private IEnumerable<Column> GetNeighbors()
         {
-            throw new NotImplementedException();
+            double minX = Math.Max(X - m_spatialPooler.InhibitionRadius, 0);
+            double maxX = Math.Min(X + m_spatialPooler.InhibitionRadius, m_spatialPooler.CurrentInput.Values.ColumnCount);
+
+            double minY = Math.Max(Y - m_spatialPooler.InhibitionRadius, 0);
+            double maxY = Math.Min(Y + m_spatialPooler.InhibitionRadius, m_spatialPooler.CurrentInput.Values.RowCount);
+
+            return m_spatialPooler.Columns.
+                Where(column => column != this
+                                && column.X >= minX
+                                && column.X < maxX
+                                && column.Y >= minY
+                                && column.Y < maxY);
         }
 
         /// <summary>
         /// Implements Spatial Pooler Phase 1: Overlap
         /// </summary>
         /// <returns>The actual overlap value</returns>
-        public int GetOverlap()
+        private int GetOverlap()
         {
             var overlap = GetConnectedSynapses().Sum(synapse => synapse.CurrentValue ? 1 : 0);
 
