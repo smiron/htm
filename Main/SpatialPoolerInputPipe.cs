@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,15 +7,12 @@ using System.Threading.Tasks;
 
 namespace Main
 {
-    public class TemporalPooler
+    public class SpatialPoolerInputPipe
     {
-        #region Methods
-
-        public object Process()
+        public BitMatrix Values
         {
-            return null;
+            get;
+            set;
         }
-
-        #endregion
     }
 }

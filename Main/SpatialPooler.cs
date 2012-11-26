@@ -10,19 +10,20 @@ namespace Main
     {
         #region Fields
 
-        private SpatialPoolerInput m_currentInput;
+        private SpatialPoolerInputPipe m_currentInput;
+        private List<Column> m_columnList;
 
         #endregion
 
         #region Properties
 
-        public List<Column> Columns
+        public IEnumerable<Column> Columns
         {
             get;
             private set;
         }
 
-        public SpatialPoolerInput CurrentInput
+        public SpatialPoolerInputPipe Input
         {
             get
             {
@@ -92,16 +93,12 @@ namespace Main
 
         #region Methods
 
-        public SpatialPoolerOutput Process(SpatialPoolerInput input)
+        public void Process()
         {
-            CurrentInput = input;
-
-            Columns.ForEach(column => column.Process());
-            Columns.ForEach(column => column.PostProcess());
+            m_columnList.ForEach(column => column.Process());
+            m_columnList.ForEach(column => column.PostProcess());
 
             InhibitionRadius = GetAverageReceptiveFieldSize();
-
-            return null;
         }
 
         /// <summary>
@@ -120,15 +117,33 @@ namespace Main
 
         #region Instance
 
-        public SpatialPooler(float minPermanence, int minOverlap, int desiredLocalActivity,
+        public SpatialPooler(SpatialPoolerInputPipe input,
+            int columnCountWidth, int columnCountHeight,
+            float minPermanence, int minOverlap, int desiredLocalActivity,
             double permanenceInc, double permanenceDec, int columnActivityHistorySize)
         {
+            Input = input;
+
             MinPermanence = minPermanence;
             MinOverlap = minOverlap;
             DesiredLocalActivity = desiredLocalActivity;
             PermanenceInc = permanenceInc;
             PermanenceDec = permanenceDec;
             ColumnActivityHistorySize = columnActivityHistorySize;
+
+            m_columnList = new List<Column>();
+
+            for (int y = 0; y < columnCountHeight; y++)
+            {
+                for (int x = 0; x < columnCountWidth; x++)
+                {
+                    var synapses = new List<Synapse>();
+
+                    // TODO: add synapses to list
+
+                    m_columnList.Add(new Column(this, x, y, synapses.ToArray()));
+                }
+            }
         }
 
         #endregion

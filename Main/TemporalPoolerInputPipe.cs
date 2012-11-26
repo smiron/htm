@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Main
 {
-    public class SpatialPoolerOutput
+    public class TemporalPoolerInputPipe
     {
     }
 }

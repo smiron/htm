@@ -47,10 +47,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpatialPooler.cs" />
-    <Compile Include="SpatialPoolerInput.cs" />
-    <Compile Include="SpatialPoolerOutput.cs" />
+    <Compile Include="SpatialPoolerInputPipe.cs" />
+    <Compile Include="SpatialPoolerOutputPipe.cs" />
     <Compile Include="Synapse.cs" />
     <Compile Include="TemporalPooler.cs" />
+    <Compile Include="TemporalPoolerInputPipe.cs" />
+    <Compile Include="TemporalPoolerOutputPipe.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

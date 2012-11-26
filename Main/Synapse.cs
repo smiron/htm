@@ -67,7 +67,7 @@ namespace Main
         {
             get
             {
-                return m_spatialPooler.CurrentInput.Values[m_x, m_y];
+                return m_spatialPooler.Input.Values[m_x, m_y];
             }
         }
 

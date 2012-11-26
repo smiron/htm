@@ -11,6 +11,7 @@ namespace Main
         #region Fields
 
         private SpatialPooler m_spatialPooler;
+        private List<Synapse> m_synapseList;
         
         private double m_activeDutyCycle;
         private double m_stagingActiveDutyCycle;
@@ -26,7 +27,7 @@ namespace Main
 
         #region Properties
 
-        public List<Synapse> Synapses
+        public IEnumerable<Synapse> Synapses
         {
             get;
             private set;
@@ -82,10 +83,10 @@ namespace Main
         private IEnumerable<Column> GetNeighbors()
         {
             double minX = Math.Max(ColumnX - m_spatialPooler.InhibitionRadius, 0);
-            double maxX = Math.Min(ColumnX + m_spatialPooler.InhibitionRadius, m_spatialPooler.CurrentInput.Values.ColumnCount);
+            double maxX = Math.Min(ColumnX + m_spatialPooler.InhibitionRadius, m_spatialPooler.Input.Values.ColumnCount);
 
             double minY = Math.Max(ColumnY - m_spatialPooler.InhibitionRadius, 0);
-            double maxY = Math.Min(ColumnY + m_spatialPooler.InhibitionRadius, m_spatialPooler.CurrentInput.Values.RowCount);
+            double maxY = Math.Min(ColumnY + m_spatialPooler.InhibitionRadius, m_spatialPooler.Input.Values.RowCount);
 
             return m_spatialPooler.Columns.
                 Where(column => column != this
@@ -122,7 +123,7 @@ namespace Main
 
         public void Process()
         {
-            Synapses.ForEach(synapse => synapse.Process());
+            m_synapseList.ForEach(synapse => synapse.Process());
 
             var minDutyCycle = 0.01 * GetMaxDutyCycle(GetNeighbors());
 
@@ -144,7 +145,7 @@ namespace Main
         /// <param name="amount"></param>
         private void IncreasePermanences(double scale)
         {
-            Synapses.ForEach(synapse => synapse.IncreasePermanence(scale));
+            m_synapseList.ForEach(synapse => synapse.IncreasePermanence(scale));
         }
 
         /// <summary>
@@ -197,9 +198,14 @@ namespace Main
 
         #region Instance
 
-        public Column(SpatialPooler spatialPooler)
+        public Column(SpatialPooler spatialPooler, int columnX, int columnY, IEnumerable<Synapse> synapses)
         {
             m_spatialPooler = spatialPooler;
+            ColumnX = columnX;
+            ColumnY = columnY;
+
+            Synapses = synapses;
+            m_synapseList = new List<Synapse>(synapses);
         }
 
         #endregion

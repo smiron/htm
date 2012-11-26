@@ -15,6 +15,16 @@ namespace Main
 
         #endregion
 
+        #region Properties
+
+        public SpatialPoolerInputPipe Input
+        {
+            get;
+            private set;
+        }
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -22,19 +32,25 @@ namespace Main
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public object Process(SpatialPoolerInput input)
+        public object Process()
         {
-            return m_temporalPooler.Process(m_spatialPooler.Process(input));
+            m_spatialPooler.Process();
+
+            return m_temporalPooler.Process();
         }
 
         #endregion
 
         #region Instance
 
-        public Network(float minPermanence, int minOverlap, int desiredLocalActivity,
+        public Network(SpatialPoolerInputPipe input, int columnCountWidth, int columnCountHeight,
+            float minPermanence, int minOverlap, int desiredLocalActivity,
             double permanenceInc, double permanenceDec, int columnActivityHistorySize)
         {
-            m_spatialPooler = new SpatialPooler(minPermanence, minOverlap, desiredLocalActivity,
+            Input = input;
+
+            m_spatialPooler = new SpatialPooler(input, columnCountWidth, columnCountHeight, 
+                minPermanence, minOverlap, desiredLocalActivity,
                 permanenceInc, permanenceDec, columnActivityHistorySize);
         }
 
