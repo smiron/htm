@@ -10,9 +10,9 @@ namespace Main
     {
         #region Fields
 
-        private SpatialPooler m_spatialPooler;
-        private int m_x;
-        private int m_y;
+        private Parameters m_parameters;
+        private ColumnReceptiveFieldPipe m_columnReceptiveFieldPipe;
+
         private double m_permanence;
 
         #endregion
@@ -67,7 +67,7 @@ namespace Main
         {
             get
             {
-                return m_spatialPooler.Input.Values[m_x, m_y];
+                return m_columnReceptiveFieldPipe.GetInputValue(SynapseX, SynapseY);
             }
         }
 
@@ -79,11 +79,11 @@ namespace Main
         {
             if (CurrentValue)
             {
-                Permanence += m_spatialPooler.PermanenceInc;
+                Permanence += m_parameters.PermanenceInc;
             }
             else
             {
-                Permanence -= m_spatialPooler.PermanenceDec;
+                Permanence -= m_parameters.PermanenceDec;
             }
         }
 
@@ -100,11 +100,14 @@ namespace Main
 
         #region Instance
 
-        public Synapse(SpatialPooler spatialPooler, int x, int y, double permanence)
+        public Synapse(Parameters parameters, ColumnReceptiveFieldPipe columnReceptiveFieldPipe, 
+            int synapseX, int synapseY, double permanence)
         {
-            m_spatialPooler = spatialPooler;
-            m_x = x;
-            m_y = y;
+            m_parameters = parameters;
+            m_columnReceptiveFieldPipe = columnReceptiveFieldPipe;
+
+            SynapseX = synapseX;
+            SynapseY = synapseY;
             Permanence = permanence;
         }
 

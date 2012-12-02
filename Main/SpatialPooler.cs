@@ -11,6 +11,7 @@ namespace Main
         #region Fields
 
         private SpatialPoolerInputPipe m_currentInput;
+        private Parameters m_parameters;
         private List<Column> m_columnList;
 
         #endregion
@@ -45,50 +46,6 @@ namespace Main
             private set;
         }
 
-        #region Parameters
-
-        /// <summary>
-        /// If the permanence value for a synapse is greater than this value, it is said to be connected.
-        /// Represents the "connectedPerm" variable in the algorithm description
-        /// </summary>
-        public double MinPermanence
-        {
-            get;
-            private set;
-        }
-
-        public double PermanenceInc
-        {
-            get;
-            private set;
-        }
-
-        public double PermanenceDec
-        {
-            get;
-            private set;
-        }
-
-        public int MinOverlap
-        {
-            get;
-            private set;
-        }
-
-        public int DesiredLocalActivity
-        {
-            get;
-            private set;
-        }
-
-        public int ColumnActivityHistorySize
-        {
-            get;
-            private set;
-        }
-
-        #endregion
-
         #endregion
 
         #region Methods
@@ -117,19 +74,11 @@ namespace Main
 
         #region Instance
 
-        public SpatialPooler(SpatialPoolerInputPipe input,
-            int columnCountWidth, int columnCountHeight,
-            float minPermanence, int minOverlap, int desiredLocalActivity,
-            double permanenceInc, double permanenceDec, int columnActivityHistorySize)
+        public SpatialPooler(SpatialPoolerInputPipe input, Parameters parameters,
+            int columnCountWidth, int columnCountHeight)
         {
             Input = input;
-
-            MinPermanence = minPermanence;
-            MinOverlap = minOverlap;
-            DesiredLocalActivity = desiredLocalActivity;
-            PermanenceInc = permanenceInc;
-            PermanenceDec = permanenceDec;
-            ColumnActivityHistorySize = columnActivityHistorySize;
+            m_parameters = parameters;
 
             m_columnList = new List<Column>();
 
@@ -137,11 +86,10 @@ namespace Main
             {
                 for (int x = 0; x < columnCountWidth; x++)
                 {
-                    var synapses = new List<Synapse>();
+                    // TODO: add coordonates maps for X and Y
 
-                    // TODO: add synapses to list
-
-                    m_columnList.Add(new Column(this, x, y, synapses.ToArray()));
+                    m_columnList.Add(new Column(this, m_parameters, 
+                        new ColumnReceptiveFieldPipe(input, parameters, null, null), x, y));
                 }
             }
         }

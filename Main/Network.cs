@@ -23,6 +23,12 @@ namespace Main
             private set;
         }
 
+        public Parameters Parameters
+        {
+            get;
+            private set;
+        }
+
         #endregion
 
         #region Methods
@@ -49,9 +55,11 @@ namespace Main
         {
             Input = input;
 
-            m_spatialPooler = new SpatialPooler(input, columnCountWidth, columnCountHeight, 
-                minPermanence, minOverlap, desiredLocalActivity,
+            Parameters = new Parameters
+                (minPermanence, minOverlap, desiredLocalActivity,
                 permanenceInc, permanenceDec, columnActivityHistorySize);
+
+            m_spatialPooler = new SpatialPooler(input, Parameters, columnCountWidth, columnCountHeight);
         }
 
         #endregion

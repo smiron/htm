@@ -11,7 +11,8 @@ namespace Main
         #region Fields
 
         private SpatialPooler m_spatialPooler;
-        private List<Synapse> m_synapseList;
+        private ColumnReceptiveFieldPipe m_columnReceptiveFieldPipe;
+        private Parameters m_parameters;
         
         private double m_activeDutyCycle;
         private double m_stagingActiveDutyCycle;
@@ -26,12 +27,6 @@ namespace Main
         #endregion
 
         #region Properties
-
-        public IEnumerable<Synapse> Synapses
-        {
-            get;
-            private set;
-        }
 
         public int ColumnX
         {
@@ -51,12 +46,12 @@ namespace Main
 
         private IEnumerable<Synapse> GetConnectedSynapses()
         {
-            return Synapses.Where(synapse => synapse.Permanence >= m_spatialPooler.MinPermanence);
+            return m_columnReceptiveFieldPipe.SynapseList.Where(synapse => synapse.Permanence >= m_parameters.MinPermanence);
         }
 
         private int GetMinLocalActivity()
         {
-            return kthScore(GetNeighbors(), m_spatialPooler.DesiredLocalActivity);
+            return kthScore(GetNeighbors(), m_parameters.DesiredLocalActivity);
         }
 
         /// <summary>
@@ -104,7 +99,7 @@ namespace Main
         {
             var overlap = GetConnectedSynapses().Sum(synapse => synapse.CurrentValue ? 1 : 0);
 
-            return overlap < m_spatialPooler.MinOverlap
+            return overlap < m_parameters.MinOverlap
                    ? 0
                    : (int)(overlap * m_boost);
         }
@@ -123,7 +118,10 @@ namespace Main
 
         public void Process()
         {
-            m_synapseList.ForEach(synapse => synapse.Process());
+            foreach (var synapse in m_columnReceptiveFieldPipe.SynapseList)
+            {
+                synapse.Process();
+            }
 
             var minDutyCycle = 0.01 * GetMaxDutyCycle(GetNeighbors());
 
@@ -135,7 +133,7 @@ namespace Main
             m_overlapDutyCycle = GetUpdatedOverlapDutyCycle();
             if (m_overlapDutyCycle < minDutyCycle)
             {
-                IncreasePermanences(0.1 * m_spatialPooler.MinPermanence);
+                IncreasePermanences(0.1 * m_parameters.MinPermanence);
             }
         }
 
@@ -145,7 +143,10 @@ namespace Main
         /// <param name="amount"></param>
         private void IncreasePermanences(double scale)
         {
-            m_synapseList.ForEach(synapse => synapse.IncreasePermanence(scale));
+            foreach (var synapse in m_columnReceptiveFieldPipe.SynapseList)
+            {
+                synapse.IncreasePermanence(scale);
+            }
         }
 
         /// <summary>
@@ -167,7 +168,7 @@ namespace Main
         /// <returns></returns>
         private double GetUpdatedOverlapDutyCycle()
         {
-            return (m_overlapDutyCycle * (m_spatialPooler.ColumnActivityHistorySize - 1) + (GetActive() ? 1 : 0)) / m_spatialPooler.ColumnActivityHistorySize;
+            return (m_overlapDutyCycle * (m_parameters.ColumnActivityHistorySize - 1) + (GetActive() ? 1 : 0)) / m_parameters.ColumnActivityHistorySize;
         }
 
         /// <summary>
@@ -181,7 +182,7 @@ namespace Main
 
         private double GetUpdatedActiveDutyCycle()
         {
-            return (m_activeDutyCycle * (m_spatialPooler.ColumnActivityHistorySize - 1) + (GetActive() ? 1 : 0)) / m_spatialPooler.ColumnActivityHistorySize;
+            return (m_activeDutyCycle * (m_parameters.ColumnActivityHistorySize - 1) + (GetActive() ? 1 : 0)) / m_parameters.ColumnActivityHistorySize;
         }
 
         /// <summary>
@@ -198,14 +199,15 @@ namespace Main
 
         #region Instance
 
-        public Column(SpatialPooler spatialPooler, int columnX, int columnY, IEnumerable<Synapse> synapses)
+        public Column(SpatialPooler spatialPooler, Parameters parameters, 
+            ColumnReceptiveFieldPipe columnReceptiveFieldPipe, int columnX, int columnY)
         {
             m_spatialPooler = spatialPooler;
+            m_parameters = parameters;
+            m_columnReceptiveFieldPipe = columnReceptiveFieldPipe;
+
             ColumnX = columnX;
             ColumnY = columnY;
-
-            Synapses = synapses;
-            m_synapseList = new List<Synapse>(synapses);
         }
 
         #endregion
