@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Main
 {
-    public class ColumnReceptiveFieldPipe
+    public class ColumnReceptiveField
     {
         #region Fields
 
@@ -78,7 +78,7 @@ namespace Main
 
         #region Instance
 
-        public ColumnReceptiveFieldPipe(SpatialPoolerInputPipe spatialPoolerInputPipe,
+        public ColumnReceptiveField(SpatialPoolerInputPipe spatialPoolerInputPipe,
             Parameters parameters, IEnumerable<int> coordonatesXMap, IEnumerable<int> coordonatesYMap)
         {
             m_random = new Random();

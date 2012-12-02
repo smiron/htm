@@ -11,7 +11,7 @@ namespace Main
         #region Fields
 
         private Parameters m_parameters;
-        private ColumnReceptiveFieldPipe m_columnReceptiveFieldPipe;
+        private ColumnReceptiveField m_columnReceptiveField;
 
         private double m_permanence;
 
@@ -67,7 +67,7 @@ namespace Main
         {
             get
             {
-                return m_columnReceptiveFieldPipe.GetInputValue(SynapseX, SynapseY);
+                return m_columnReceptiveField.GetInputValue(SynapseX, SynapseY);
             }
         }
 
@@ -100,11 +100,11 @@ namespace Main
 
         #region Instance
 
-        public Synapse(Parameters parameters, ColumnReceptiveFieldPipe columnReceptiveFieldPipe, 
+        public Synapse(Parameters parameters, ColumnReceptiveField columnReceptiveFieldPipe, 
             int synapseX, int synapseY, double permanence)
         {
             m_parameters = parameters;
-            m_columnReceptiveFieldPipe = columnReceptiveFieldPipe;
+            m_columnReceptiveField = columnReceptiveFieldPipe;
 
             SynapseX = synapseX;
             SynapseY = synapseY;

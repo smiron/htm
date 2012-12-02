@@ -11,7 +11,7 @@ namespace Main
         #region Fields
 
         private SpatialPooler m_spatialPooler;
-        private ColumnReceptiveFieldPipe m_columnReceptiveFieldPipe;
+        private ColumnReceptiveField m_columnReceptiveField;
         private Parameters m_parameters;
         
         private double m_activeDutyCycle;
@@ -46,7 +46,7 @@ namespace Main
 
         private IEnumerable<Synapse> GetConnectedSynapses()
         {
-            return m_columnReceptiveFieldPipe.SynapseList.Where(synapse => synapse.Permanence >= m_parameters.MinPermanence);
+            return m_columnReceptiveField.SynapseList.Where(synapse => synapse.Permanence >= m_parameters.MinPermanence);
         }
 
         private int GetMinLocalActivity()
@@ -118,7 +118,7 @@ namespace Main
 
         public void Process()
         {
-            foreach (var synapse in m_columnReceptiveFieldPipe.SynapseList)
+            foreach (var synapse in m_columnReceptiveField.SynapseList)
             {
                 synapse.Process();
             }
@@ -143,7 +143,7 @@ namespace Main
         /// <param name="amount"></param>
         private void IncreasePermanences(double scale)
         {
-            foreach (var synapse in m_columnReceptiveFieldPipe.SynapseList)
+            foreach (var synapse in m_columnReceptiveField.SynapseList)
             {
                 synapse.IncreasePermanence(scale);
             }
@@ -200,11 +200,11 @@ namespace Main
         #region Instance
 
         public Column(SpatialPooler spatialPooler, Parameters parameters, 
-            ColumnReceptiveFieldPipe columnReceptiveFieldPipe, int columnX, int columnY)
+            ColumnReceptiveField columnReceptiveFieldPipe, int columnX, int columnY)
         {
             m_spatialPooler = spatialPooler;
             m_parameters = parameters;
-            m_columnReceptiveFieldPipe = columnReceptiveFieldPipe;
+            m_columnReceptiveField = columnReceptiveFieldPipe;
 
             ColumnX = columnX;
             ColumnY = columnY;

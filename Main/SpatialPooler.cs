@@ -89,7 +89,7 @@ namespace Main
                     // TODO: add coordonates maps for X and Y
 
                     m_columnList.Add(new Column(this, m_parameters, 
-                        new ColumnReceptiveFieldPipe(input, parameters, null, null), x, y));
+                        new ColumnReceptiveField(input, parameters, null, null), x, y));
                 }
             }
         }
