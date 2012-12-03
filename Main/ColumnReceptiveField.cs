@@ -37,21 +37,25 @@ namespace Main
             }
         }
 
-        public Synapse[,] Synapses
-        {
-            get;
-            private set;
-        }
-
-        public Synapse[] SynapseList
-        {
-            get;
-            private set;
-        }
-
         #endregion
 
         #region Methods
+
+        public Synapse[] GetSynapses()
+        {
+            var ret = new Synapse[Height * Width];
+
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    var synapse = new Synapse(m_parameters, this, x, y, GetRandomPermanence());
+                    ret[y * Width + x] = synapse;
+                }
+            }
+
+            return ret;
+        }
 
         public bool GetInputValue(int x, int y)
         {
@@ -89,20 +93,20 @@ namespace Main
             m_coordonatesXMap = coordonatesXMap.ToArray();
             m_coordonatesYMap = coordonatesYMap.ToArray();
 
-            var synapses = new Synapse[Height, Width];
-            var synapseList = new Synapse[Height * Width];
+            //var synapses = new Synapse[Height, Width];
+            //var synapseList = new Synapse[Height * Width];
 
-            for (int y = 0; y < Height; y++)
-            {
-                for (int x = 0; x < Width; x++)
-                {
-                    var synapse = new Synapse(m_parameters, this, x, y, GetRandomPermanence());
-                    synapses[y, x] = synapse;
-                    synapseList[y * Width + x] = synapse;
-                }
-            }
+            //for (int y = 0; y < Height; y++)
+            //{
+            //    for (int x = 0; x < Width; x++)
+            //    {
+            //        var synapse = new Synapse(m_parameters, this, x, y, GetRandomPermanence());
+            //        synapses[y, x] = synapse;
+            //        synapseList[y * Width + x] = synapse;
+            //    }
+            //}
 
-            Synapses = synapses;
+            //Synapses = synapses;
         }
 
         #endregion
