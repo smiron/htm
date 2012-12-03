@@ -44,6 +44,7 @@
     <Compile Include="BitMatrix.cs" />
     <Compile Include="Column.cs" />
     <Compile Include="ColumnReceptiveField.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Network.cs" />
     <Compile Include="Parameters.cs" />
     <Compile Include="Program.cs" />
