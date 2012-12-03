@@ -8,5 +8,10 @@ namespace Main
 {
     public class TemporalPoolerInputPipe
     {
+        public IEnumerable<Point2D> ActiveColumns
+        {
+            get;
+            set;
+        }
     }
 }

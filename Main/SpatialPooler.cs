@@ -88,8 +88,8 @@ namespace Main
                 {
                     // TODO: add coordonates maps for X and Y
 
-                    m_columnList.Add(new Column(this, m_parameters, 
-                        new ColumnReceptiveField(input, parameters, null, null), x, y));
+                    m_columnList.Add(new Column(this, m_parameters,
+                        new ColumnReceptiveField(input, parameters, null, null), new Point2D(x, y)));
                 }
             }
         }

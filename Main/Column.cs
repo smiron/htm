@@ -29,13 +29,7 @@ namespace Main
 
         #region Properties
 
-        public int ColumnX
-        {
-            get;
-            private set;
-        }
-
-        public int ColumnY
+        public Point2D Location
         {
             get;
             private set;
@@ -78,18 +72,18 @@ namespace Main
         /// <returns></returns>
         private IEnumerable<Column> GetNeighbors()
         {
-            double minX = Math.Max(ColumnX - m_spatialPooler.InhibitionRadius, 0);
-            double maxX = Math.Min(ColumnX + m_spatialPooler.InhibitionRadius, m_spatialPooler.Input.Values.ColumnCount);
+            double minX = Math.Max(Location.X - m_spatialPooler.InhibitionRadius, 0);
+            double maxX = Math.Min(Location.X + m_spatialPooler.InhibitionRadius, m_spatialPooler.Input.Values.ColumnCount);
 
-            double minY = Math.Max(ColumnY - m_spatialPooler.InhibitionRadius, 0);
-            double maxY = Math.Min(ColumnY + m_spatialPooler.InhibitionRadius, m_spatialPooler.Input.Values.RowCount);
+            double minY = Math.Max(Location.Y - m_spatialPooler.InhibitionRadius, 0);
+            double maxY = Math.Min(Location.Y + m_spatialPooler.InhibitionRadius, m_spatialPooler.Input.Values.RowCount);
 
             return m_spatialPooler.Columns.
                 Where(column => column != this
-                                && column.ColumnX >= minX
-                                && column.ColumnX < maxX
-                                && column.ColumnY >= minY
-                                && column.ColumnY < maxY);
+                                && column.Location.X >= minX
+                                && column.Location.X < maxX
+                                && column.Location.Y >= minY
+                                && column.Location.Y < maxY);
         }
 
         /// <summary>
@@ -210,14 +204,13 @@ namespace Main
         #region Instance
 
         public Column(SpatialPooler spatialPooler, Parameters parameters, 
-            ColumnReceptiveField columnReceptiveFieldPipe, int columnX, int columnY)
+            ColumnReceptiveField columnReceptiveFieldPipe, Point2D location)
         {
             m_spatialPooler = spatialPooler;
             m_parameters = parameters;
             m_columnReceptiveField = columnReceptiveFieldPipe;
 
-            ColumnX = columnX;
-            ColumnY = columnY;
+            Location = location;
 
             m_synapses = m_columnReceptiveField.GetSynapses().ToList();
         }
