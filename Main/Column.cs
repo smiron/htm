@@ -190,6 +190,21 @@ namespace Main
             return neighbors.Select(neighbor => neighbor.m_activeDutyCycle).Max();
         }
 
+        /// <summary>
+        /// The radius of the average connected receptive field size of all the columns. 
+        /// The connected receptive field size of a column includes only the connected synapses 
+        /// (those with permanence values >= connectedPerm). 
+        /// This is used to determine the extent of lateral inhibition between columns.
+        /// </summary>
+        /// <returns></returns>
+        public double GetReceptiveFieldSize()
+        {
+            int centerX = m_columnReceptiveField.Width / 2;
+            int centerY = m_columnReceptiveField.Height / 2;
+
+            return m_synapses.Where(synapse => synapse.IsConnected).Select(synapse => Math.Sqrt(Math.Pow(synapse.SynapseX - centerX, 2) + Math.Pow(synapse.SynapseY - centerY, 2))).Max();
+        }
+
         #endregion
 
         #region Instance

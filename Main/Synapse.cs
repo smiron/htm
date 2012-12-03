@@ -67,7 +67,15 @@ namespace Main
         {
             get
             {
-                return m_columnReceptiveField.GetInputValue(SynapseX, SynapseY);
+                return m_columnReceptiveField.GetInputValue(this);
+            }
+        }
+
+        public bool IsConnected
+        {
+            get
+            {
+                return m_permanence >= m_parameters.MinPermanence;
             }
         }
 

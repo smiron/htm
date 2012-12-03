@@ -67,7 +67,7 @@ namespace Main
         /// <returns></returns>
         private double GetAverageReceptiveFieldSize()
         {
-            throw new NotImplementedException();
+            return m_columnList.Select(column => column.GetReceptiveFieldSize()).Average();
         }
 
         #endregion

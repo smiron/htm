@@ -49,17 +49,16 @@ namespace Main
             {
                 for (int x = 0; x < Width; x++)
                 {
-                    var synapse = new Synapse(m_parameters, this, x, y, GetRandomPermanence());
-                    ret[y * Width + x] = synapse;
+                    ret[y * Width + x] = new Synapse(m_parameters, this, x, y, GetRandomPermanence());
                 }
             }
 
             return ret;
         }
 
-        public bool GetInputValue(int x, int y)
+        public bool GetInputValue(Synapse synapse)
         {
-            return m_spatialPoolerinputPipe.Values[m_coordonatesXMap[x], m_coordonatesYMap[y]];
+            return m_spatialPoolerinputPipe.Values[m_coordonatesXMap[synapse.SynapseX], m_coordonatesYMap[synapse.SynapseY]];
         }
 
         private double GetRandomPermanence()
