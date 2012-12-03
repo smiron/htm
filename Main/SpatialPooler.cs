@@ -74,17 +74,16 @@ namespace Main
 
         #region Instance
 
-        public SpatialPooler(SpatialPoolerInputPipe input, Parameters parameters,
-            int columnCountWidth, int columnCountHeight)
+        public SpatialPooler(SpatialPoolerInputPipe input, Parameters parameters)
         {
             Input = input;
             m_parameters = parameters;
 
             m_columnList = new List<Column>();
 
-            for (int y = 0; y < columnCountHeight; y++)
+            for (int y = 0; y < parameters.ColumnCountHeight; y++)
             {
-                for (int x = 0; x < columnCountWidth; x++)
+                for (int x = 0; x < parameters.ColumnCountWidth; x++)
                 {
                     // TODO: add coordonates maps for X and Y
 

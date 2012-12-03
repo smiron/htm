@@ -38,11 +38,11 @@ namespace Main
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public object Process()
+        public void Process()
         {
             m_spatialPooler.Process();
 
-            return m_temporalPooler.Process();
+            m_temporalPooler.Process();
         }
 
         #endregion
@@ -57,9 +57,10 @@ namespace Main
 
             Parameters = new Parameters
                 (minPermanence, minOverlap, desiredLocalActivity,
-                permanenceInc, permanenceDec, columnActivityHistorySize);
+                permanenceInc, permanenceDec, columnActivityHistorySize,
+                columnCountWidth, columnCountHeight);
 
-            m_spatialPooler = new SpatialPooler(input, Parameters, columnCountWidth, columnCountHeight);
+            m_spatialPooler = new SpatialPooler(input, Parameters);
         }
 
         #endregion

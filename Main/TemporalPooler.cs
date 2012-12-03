@@ -8,11 +8,35 @@ namespace Main
 {
     public class TemporalPooler
     {
+        #region Fields
+
+        private TemporalPoolerInputPipe m_temporalPoolerInputPipe;
+
+        #endregion
+
         #region Methods
 
-        public object Process()
+        public void Process()
         {
-            return null;
+
+        }
+
+        #endregion
+
+        #region Instance
+
+        public TemporalPooler(TemporalPoolerInputPipe temporalPoolerInputPipe, int numberOfCellsPerColumn)
+        {
+            #region Argument Check
+
+            if (temporalPoolerInputPipe == null)
+            {
+                throw new ArgumentNullException("temporalPoolerInputPipe");
+            }
+
+            #endregion
+
+            m_temporalPoolerInputPipe = temporalPoolerInputPipe;
         }
 
         #endregion

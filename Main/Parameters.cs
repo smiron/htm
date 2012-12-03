@@ -50,12 +50,25 @@ namespace Main
             set;
         }
 
+        public int ColumnCountWidth
+        {
+            get;
+            private set;
+        }
+
+        public int ColumnCountHeight
+        {
+            get;
+            private set;
+        }
+
         #endregion
 
         #region Instance
 
         public Parameters(float minPermanence, int minOverlap, int desiredLocalActivity,
-            double permanenceInc, double permanenceDec, int columnActivityHistorySize)
+            double permanenceInc, double permanenceDec, int columnActivityHistorySize,
+            int columnCountWidth, int columnCountHeight)
         {
             MinPermanence = minPermanence;
             PermanenceInc = permanenceInc;
@@ -63,6 +76,8 @@ namespace Main
             MinOverlap = minOverlap;
             DesiredLocalActivity = desiredLocalActivity;
             ColumnActivityHistorySize = columnActivityHistorySize;
+            ColumnCountWidth = columnCountWidth;
+            ColumnCountHeight = columnCountHeight;
         }
 
         #endregion
