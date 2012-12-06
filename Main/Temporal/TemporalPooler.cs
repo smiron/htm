@@ -11,8 +11,24 @@ namespace Main.Temporal
     {
         #region Fields
 
-        private TemporalPoolerInputPipe m_temporalPoolerInputPipe;
+        private TemporalPoolerInputPipe m_input;
         private Parameters m_parameters;
+
+        #endregion
+
+        #region Properties
+
+        public TemporalPoolerInputPipe Input
+        {
+            get;
+            private set;
+        }
+
+        public Column[,] Columns
+        {
+            get;
+            private set;
+        }
 
         #endregion
 
@@ -20,24 +36,27 @@ namespace Main.Temporal
 
         public void Process()
         {
+            m_input.ActiveColumns.
+                Select(activeColumnLocation => Columns[activeColumnLocation.X, activeColumnLocation.Y]).ToList().
+                ForEach(column => column.Process());
         }
 
         #endregion
 
         #region Instance
 
-        public TemporalPooler(TemporalPoolerInputPipe temporalPoolerInputPipe, Parameters parameters)
+        public TemporalPooler(TemporalPoolerInputPipe input, Parameters parameters)
         {
             #region Argument Check
 
-            if (temporalPoolerInputPipe == null)
+            if (input == null)
             {
                 throw new ArgumentNullException("temporalPoolerInputPipe");
             }
 
             #endregion
 
-            m_temporalPoolerInputPipe = temporalPoolerInputPipe;
+            m_input = input;
             m_parameters = parameters;
         }
 

@@ -54,6 +54,9 @@
     <Compile Include="Spatial\SpatialPoolerInputPipe.cs" />
     <Compile Include="Spatial\SpatialPoolerOutputPipe.cs" />
     <Compile Include="Spatial\Synapse.cs" />
+    <Compile Include="Temporal\Cell.cs" />
+    <Compile Include="Temporal\Column.cs" />
+    <Compile Include="Temporal\Segment.cs" />
     <Compile Include="Temporal\TemporalPooler.cs" />
     <Compile Include="Temporal\TemporalPoolerInputPipe.cs" />
     <Compile Include="Temporal\TemporalPoolerOutputPipe.cs" />
