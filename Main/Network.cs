@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Main.Misc;
+using Main.Spatial;
+using Main.Temporal;
 
 namespace Main
 {
@@ -51,14 +54,14 @@ namespace Main
 
         public Network(SpatialPoolerInputPipe input, int columnCountWidth, int columnCountHeight,
             float minPermanence, int minOverlap, int desiredLocalActivity,
-            double permanenceInc, double permanenceDec, int columnActivityHistorySize)
+            double permanenceInc, double permanenceDec, int columnActivityHistorySize, int numberOfCellsPerColumn)
         {
             Input = input;
 
             Parameters = new Parameters
                 (minPermanence, minOverlap, desiredLocalActivity,
                 permanenceInc, permanenceDec, columnActivityHistorySize,
-                columnCountWidth, columnCountHeight);
+                columnCountWidth, columnCountHeight, numberOfCellsPerColumn);
 
             m_spatialPooler = new SpatialPooler(input, Parameters);
         }

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Main.Misc;
 
-namespace Main
+namespace Main.Spatial
 {
     public class ColumnReceptiveField
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Main
+namespace Main.Misc
 {
     public class Parameters
     {
@@ -62,13 +62,19 @@ namespace Main
             private set;
         }
 
+        public int NumberOfCellsPerColumn
+        {
+            get;
+            private set;
+        }
+
         #endregion
 
         #region Instance
 
         public Parameters(float minPermanence, int minOverlap, int desiredLocalActivity,
             double permanenceInc, double permanenceDec, int columnActivityHistorySize,
-            int columnCountWidth, int columnCountHeight)
+            int columnCountWidth, int columnCountHeight, int numberOfCellsPerColumn)
         {
             MinPermanence = minPermanence;
             PermanenceInc = permanenceInc;
@@ -78,6 +84,7 @@ namespace Main
             ColumnActivityHistorySize = columnActivityHistorySize;
             ColumnCountWidth = columnCountWidth;
             ColumnCountHeight = columnCountHeight;
+            NumberOfCellsPerColumn = numberOfCellsPerColumn;
         }
 
         #endregion

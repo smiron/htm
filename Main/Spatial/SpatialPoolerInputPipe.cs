@@ -1,14 +1,16 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Main.Misc;
 
-namespace Main
+namespace Main.Spatial
 {
-    public class TemporalPoolerInputPipe
+    public class SpatialPoolerInputPipe
     {
-        public IEnumerable<Point2D> ActiveColumns
+        public BitMatrix Values
         {
             get;
             set;

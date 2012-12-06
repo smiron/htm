@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Main
+namespace Main.Spatial
 {
-    public class TemporalPoolerOutputPipe
+    public class SpatialPoolerOutputPipe
     {
     }
 }

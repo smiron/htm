@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Main.Misc;
 
-namespace Main
+namespace Main.Temporal
 {
     public class TemporalPooler
     {
         #region Fields
 
         private TemporalPoolerInputPipe m_temporalPoolerInputPipe;
+        private Parameters m_parameters;
 
         #endregion
 
@@ -18,14 +20,13 @@ namespace Main
 
         public void Process()
         {
-
         }
 
         #endregion
 
         #region Instance
 
-        public TemporalPooler(TemporalPoolerInputPipe temporalPoolerInputPipe, int numberOfCellsPerColumn)
+        public TemporalPooler(TemporalPoolerInputPipe temporalPoolerInputPipe, Parameters parameters)
         {
             #region Argument Check
 
@@ -37,6 +38,7 @@ namespace Main
             #endregion
 
             m_temporalPoolerInputPipe = temporalPoolerInputPipe;
+            m_parameters = parameters;
         }
 
         #endregion
