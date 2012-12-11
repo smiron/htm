@@ -46,8 +46,44 @@ namespace Main.Temporal
 
             foreach (var cell in Cells)
             {
-
+                if (cell.GetPredictiveState(Time.Prev))
+                {
+                    var s = cell.GetActiveSegment(ActiveMode.ActiveState, Time.Prev);
+                    if (s.IsSequenceSegment)
+                    {
+                        buPredicted = true;
+                        cell.IsActiveState = true;
+                        if (s.GetIsSegmentActive(ActiveMode.LearnState, Time.Prev))
+                        {
+                            icChosen=true;
+                            cell.IsLearnState = true;
+                        }
+                    }
+                }
             }
+
+            // if no cell was predicted to be active .. activate all cell in the column
+            if (buPredicted == false)
+            {
+                foreach (var cell in Cells)
+                {
+                    cell.IsActiveState = true;
+                }
+            }
+
+            if (icChosen == false)
+            {
+                Cell cell = null;
+                Segment segment = null;
+
+                CalculateBestMatchingCellAndSegment(Time.Prev, out cell, out segment);
+                cell.IsLearnState = true;
+            }
+        }
+
+        private void CalculateBestMatchingCellAndSegment(Time time, out Cell cell, out Segment segment)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

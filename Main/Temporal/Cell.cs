@@ -10,10 +10,16 @@ namespace Main.Temporal
     {
         #region Properties
 
-        private bool PredictiveState
+        public bool IsActiveState
         {
             get;
-            private set;
+            set;
+        }
+
+        public bool IsLearnState
+        {
+            get;
+            set;
         }
 
         public IEnumerable<Segment> Segments
@@ -26,8 +32,15 @@ namespace Main.Temporal
 
         #region Methods
 
-        public Segment GetActiveSegment(ActiveSegmentMode mode)
+        public bool GetPredictiveState(Time time)
         {
+            throw new NotImplementedException();
+        }
+
+        public Segment GetActiveSegment(ActiveMode mode, Time time)
+        {
+            //return Segments.FirstOrDefault(segment => segment.GetIsSegmentActive(mode));
+            throw new NotImplementedException();
         }
 
         #endregion

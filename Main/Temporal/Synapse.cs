@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Main.Temporal
 {
-    public class Segment
+    public class Synapse
     {
-        public bool IsSequenceSegment { get; set; }
-
-        public bool GetIsSegmentActive(ActiveMode mode, Time time)
+        public bool GetIsActive(ActiveMode mode)
         {
             throw new NotImplementedException();
         }
