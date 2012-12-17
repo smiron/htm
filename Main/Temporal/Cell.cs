@@ -16,12 +16,6 @@ namespace Main.Temporal
             set;
         }
 
-        public bool IsLearnState
-        {
-            get;
-            set;
-        }
-
         public IEnumerable<Segment> Segments
         {
             get;
@@ -31,6 +25,16 @@ namespace Main.Temporal
         #endregion
 
         #region Methods
+
+        public void SetIsLearningState(Time time, bool value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool GetIsLearningState(Time time)
+        {
+            throw new NotImplementedException();
+        }
 
         public bool GetPredictiveState(Time time)
         {

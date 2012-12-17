@@ -9,6 +9,15 @@ namespace Main.Temporal
 {
     public class Column
     {
+        #region Fields
+
+        private List<SegmentUpdate> _segmentUpdateList;
+        private TemporalPooler _temporalPooler;
+        private Parameters _parameters;
+        private Point2D _location;
+
+        #endregion
+
         #region Properties
 
         public TemporalPooler TemporalPooler
@@ -55,8 +64,8 @@ namespace Main.Temporal
                         cell.IsActiveState = true;
                         if (s.GetIsSegmentActive(ActiveMode.LearnState, Time.Prev))
                         {
-                            icChosen=true;
-                            cell.IsLearnState = true;
+                            icChosen = true;
+                            cell.SetIsLearningState(Time.Current, true);
                         }
                     }
                 }
@@ -77,11 +86,19 @@ namespace Main.Temporal
                 Segment segment = null;
 
                 CalculateBestMatchingCellAndSegment(Time.Prev, out cell, out segment);
-                cell.IsLearnState = true;
+                cell.SetIsLearningState(Time.Current, true);
+
+                var sUpdate = GetSegemntActiveSynapses(segment, cell, true);
+                sUpdate.SequenceSegment = true;
             }
         }
 
         private void CalculateBestMatchingCellAndSegment(Time time, out Cell cell, out Segment segment)
+        {
+            throw new NotImplementedException();
+        }
+
+        private SegmentUpdate GetSegemntActiveSynapses(Segment segment, Cell cell, bool newSynapses = false)
         {
             throw new NotImplementedException();
         }
@@ -92,6 +109,10 @@ namespace Main.Temporal
 
         public Column(TemporalPooler temporalPooler, Parameters parameters, Point2D location)
         {
+            _segmentUpdateList = new List<SegmentUpdate>();
+            _temporalPooler = temporalPooler;
+            _parameters = parameters;
+            _location = location;
         }
 
         #endregion

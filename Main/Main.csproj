@@ -58,6 +58,7 @@
     <Compile Include="Temporal\Cell.cs" />
     <Compile Include="Temporal\Column.cs" />
     <Compile Include="Temporal\Segment.cs" />
+    <Compile Include="Temporal\SegmentUpdate.cs" />
     <Compile Include="Temporal\Synapse.cs" />
     <Compile Include="Temporal\TemporalPooler.cs" />
     <Compile Include="Temporal\TemporalPoolerInputPipe.cs" />
