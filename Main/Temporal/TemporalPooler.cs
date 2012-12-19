@@ -30,6 +30,12 @@ namespace Main.Temporal
             private set;
         }
 
+        public Mode Mode
+        {
+            get;
+            set;
+        }
+
         #endregion
 
         #region Methods

@@ -50,6 +50,65 @@ namespace Main.Temporal
 
         public void Process()
         {
+            switch (TemporalPooler.Mode)
+            {
+                case Mode.Inference:
+                    break;
+                case Mode.InferenceAndLearning:
+                    {
+                        ProcessInferenceAndLearning();
+                        break;
+                    }
+            }
+        }
+
+        private void ProcessInference()
+        {
+            #region phase 1
+
+            bool buPredicted = false;
+            foreach (var cell in Cells)
+            {
+                if (cell.GetPredictiveState(Time.Prev))
+                {
+                    var s = cell.GetActiveSegment(ActiveMode.ActiveState, Time.Prev);
+                    if (s.IsSequenceSegment)
+                    {
+                        buPredicted = true;
+                        cell.SetIsActiveState(Time.Now, true);
+                    }
+                }
+            }
+
+            // if no cell was predicted to be active .. activate all cell in the column
+            if (buPredicted == false)
+            {
+                foreach (var cell in Cells)
+                {
+                    cell.SetIsActiveState(Time.Now, true);
+                }
+            }
+
+            #endregion
+
+            #region phase 2
+
+            foreach (var cell in Cells)
+            {
+                foreach (var segment in cell.Segments)
+                {
+                    if (segment.GetIsSegmentActive(ActiveMode.ActiveState, Time.Now))
+                    {
+                        cell.SetPredictiveState(Time.Now, true);
+                    }
+                }
+            }
+
+            #endregion
+        }
+
+        private void ProcessInferenceAndLearning()
+        {
             bool buPredicted = false;
             bool icChosen = false;
 
@@ -61,11 +120,11 @@ namespace Main.Temporal
                     if (s.IsSequenceSegment)
                     {
                         buPredicted = true;
-                        cell.IsActiveState = true;
+                        cell.SetIsActiveState(Time.Now, true);
                         if (s.GetIsSegmentActive(ActiveMode.LearnState, Time.Prev))
                         {
                             icChosen = true;
-                            cell.SetIsLearningState(Time.Current, true);
+                            cell.SetIsLearningState(Time.Now, true);
                         }
                     }
                 }
@@ -76,7 +135,7 @@ namespace Main.Temporal
             {
                 foreach (var cell in Cells)
                 {
-                    cell.IsActiveState = true;
+                    cell.SetIsActiveState(Time.Now, true);
                 }
             }
 
@@ -86,7 +145,7 @@ namespace Main.Temporal
                 Segment segment = null;
 
                 CalculateBestMatchingCellAndSegment(Time.Prev, out cell, out segment);
-                cell.SetIsLearningState(Time.Current, true);
+                cell.SetIsLearningState(Time.Now, true);
 
                 var sUpdate = GetSegemntActiveSynapses(segment, cell, true);
                 sUpdate.SequenceSegment = true;

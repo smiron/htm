@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Main.Temporal
 {
-    public enum Time
+    public enum Mode
     {
-        Prev,
-        Now
+        Inference,
+        InferenceAndLearning
     }
 }

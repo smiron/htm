@@ -57,6 +57,7 @@
     <Compile Include="Temporal\ActiveMode.cs" />
     <Compile Include="Temporal\Cell.cs" />
     <Compile Include="Temporal\Column.cs" />
+    <Compile Include="Temporal\Mode.cs" />
     <Compile Include="Temporal\Segment.cs" />
     <Compile Include="Temporal\SegmentUpdate.cs" />
     <Compile Include="Temporal\Synapse.cs" />
