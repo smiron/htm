@@ -53,7 +53,10 @@ namespace Main.Temporal
             switch (TemporalPooler.Mode)
             {
                 case Mode.Inference:
-                    break;
+                    {
+                        ProcessInference();
+                        break;
+                    }
                 case Mode.InferenceAndLearning:
                     {
                         ProcessInferenceAndLearning();
@@ -201,6 +204,8 @@ namespace Main.Temporal
             #endregion
         }
 
+        #region Helpers
+
         private void AdaptSegments(IEnumerable<SegmentUpdate> cellSegmentUpdates, bool positiveReinforcement)
         {
             throw new NotImplementedException();
@@ -220,6 +225,8 @@ namespace Main.Temporal
         {
             throw new NotImplementedException();
         }
+
+        #endregion
 
         #endregion
 

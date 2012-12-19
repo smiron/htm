@@ -8,7 +8,7 @@ namespace Main.Temporal
 {
     public enum Time
     {
-        Prev,
-        Now
+        Prev = 0,
+        Now = 1
     }
 }
