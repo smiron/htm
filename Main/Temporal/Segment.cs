@@ -8,11 +8,29 @@ namespace Main.Temporal
 {
     public class Segment
     {
-        public bool IsSequenceSegment { get; set; }
+        #region Properties
+
+        public IEnumerable<Synapse> Synapses
+        {
+            get;
+            private set;
+        }
+
+        public bool IsSequenceSegment
+        {
+            get;
+            set;
+        }
+
+        #endregion
+
+        #region Methods
 
         public bool GetIsSegmentActive(ActiveMode mode, Time time)
         {
             throw new NotImplementedException();
         }
+
+        #endregion
     }
 }
