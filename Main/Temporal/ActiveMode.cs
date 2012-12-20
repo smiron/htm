@@ -8,7 +8,7 @@ namespace Main.Temporal
 {
     public enum ActiveMode
     {
-        ActiveState,
-        LearnState
+        ActiveState = 0,
+        LearnState = 1
     }
 }

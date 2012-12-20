@@ -58,10 +58,26 @@ namespace Main.Temporal
             m_predictiveState[(int)time] = value;
         }
 
+        /// <summary>
+        /// getActiveSegment(c, i, t, state)
+        ///     For the given column c cell i, return a segment index such that segmentActive(s,t, state) is true. 
+        ///     If multiple segments are active, sequence segments are given preference. 
+        ///     Otherwise, segments with most activity are given preference.
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
         public Segment GetActiveSegment(ActiveMode mode, Time time)
         {
-            //return Segments.FirstOrDefault(segment => segment.GetIsSegmentActive(mode));
-            throw new NotImplementedException();
+            var orderedSegments = Segments.
+                Where(segment => segment.GetIsSegmentActive(mode, time)).
+                OrderBy(segment => segment.GetIsSegmentActiveScore(mode, time)).ToArray();
+
+            var firstSequenceSegment = orderedSegments.FirstOrDefault(segment => segment.IsSequenceSegment);
+
+            return firstSequenceSegment != null
+                ? firstSequenceSegment
+                : orderedSegments.FirstOrDefault();
         }
 
         #endregion

@@ -20,6 +20,14 @@ namespace Main
 
         #region Properties
 
+        public static Network Instance
+        {
+            get
+            {
+                return null;
+            }
+        }
+
         public SpatialPoolerInputPipe Input
         {
             get;
@@ -52,7 +60,7 @@ namespace Main
 
         #region Instance
 
-        public Network(SpatialPoolerInputPipe input, int columnCountWidth, int columnCountHeight,
+        private Network(SpatialPoolerInputPipe input, int columnCountWidth, int columnCountHeight,
             float minPermanence, int minOverlap, int desiredLocalActivity,
             double permanenceInc, double permanenceDec, int columnActivityHistorySize, int numberOfCellsPerColumn)
         {
