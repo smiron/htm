@@ -206,11 +206,71 @@ namespace Main.Temporal
 
         #region Helpers
 
-        private void AdaptSegments(IEnumerable<SegmentUpdate> cellSegmentUpdates, bool positiveReinforcement)
+        /// <summary>
+        /// adaptSegments(segmentList, positiveReinforcement)
+        ///     This function iterates through a list of segmentUpdate's and reinforces each segment. 
+        ///     For each segmentUpdate element, the following changes are performed. 
+        ///         If positiveReinforcement is true then synapses on the active list get their permanence counts 
+        ///     incremented by permanenceInc. All other synapses get their permanence counts decremented 
+        ///     by permanenceDec. 
+        ///         If positiveReinforcement is false, then synapses on the active list get 
+        ///     their permanence counts decremented by permanenceDec. 
+        ///     
+        ///         After this step, any synapses in segmentUpdate that do yet exist get added with a 
+        ///     permanence count of initialPerm.
+        /// </summary>
+        /// <param name="segmentUpdates"></param>
+        /// <param name="positiveReinforcement"></param>
+        private void AdaptSegments(IEnumerable<SegmentUpdate> segmentUpdates, bool positiveReinforcement)
         {
-            throw new NotImplementedException();
+            foreach (var segmentUpdate in segmentUpdates)
+            {
+                // perform synapse update
+                if (positiveReinforcement)
+                {
+                    segmentUpdate.Segment.Synapses.ToList().
+                        ForEach(synapse =>
+                        {
+                            if (segmentUpdate.ActiveSynapses.Contains(synapse))
+                            {
+                                synapse.Permanence += Network.Instance.Parameters.PermanenceInc;
+                            }
+                            else
+                            {
+                                synapse.Permanence -= Network.Instance.Parameters.PermanenceDec;
+                            }
+                        });
+                }
+                else
+                {
+                    segmentUpdate.ActiveSynapses.ToList().ForEach
+                        (synapse => synapse.Permanence -=
+                        Network.Instance.Parameters.PermanenceDec);
+                }
+
+                // add missing synapses with initial permanence
+                var newSynapses = segmentUpdate.ActiveSynapses.Except(segmentUpdate.Segment.Synapses).ToList();
+
+                if (newSynapses.Any())
+	            {
+                    newSynapses.ForEach(synapse => synapse.Permanence = Network.Instance.Parameters.InitialPermanence);
+
+                    segmentUpdate.Segment.AddSynapses(newSynapses);
+                }
+            }
         }
 
+        /// <summary>
+        /// getBestMatchingSegment(c, i, t)
+        ///      For the given column c cell i at time t, find the segment with the largest number of active synapses. 
+        ///      This routine is aggressive in finding the best match. 
+        ///      The permanence value of synapses is allowed to be below connectedPerm. 
+        ///      The number of active synapses is allowed to be below activationThreshold, but must be above minThreshold. 
+        ///      The routine returns the segment index. If no segments are found, then an index of -1 is returned.
+        /// </summary>
+        /// <param name="cell"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
         private Segment GetBestMatchingSegment(Cell cell, Time time)
         {
             throw new NotImplementedException();

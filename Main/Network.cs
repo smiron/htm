@@ -62,15 +62,16 @@ namespace Main
 
         private Network(SpatialPoolerInputPipe input, int columnCountWidth, int columnCountHeight,
             float minPermanence, int minOverlap, int desiredLocalActivity,
-            double permanenceInc, double permanenceDec, int columnActivityHistorySize, 
-            int numberOfCellsPerColumn, int activationThreshold)
+            double permanenceInc, double permanenceDec, int columnActivityHistorySize,
+            int numberOfCellsPerColumn, int activationThreshold, int initialPermanence)
         {
             Input = input;
 
             Parameters = new Parameters
                 (minPermanence, minOverlap, desiredLocalActivity,
                 permanenceInc, permanenceDec, columnActivityHistorySize,
-                columnCountWidth, columnCountHeight, numberOfCellsPerColumn, activationThreshold);
+                columnCountWidth, columnCountHeight, numberOfCellsPerColumn, 
+                activationThreshold, initialPermanence);
 
             m_spatialPooler = new SpatialPooler(input, Parameters);
         }

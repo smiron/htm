@@ -26,6 +26,11 @@ namespace Main.Temporal
 
         #region Methods
 
+        public void AddSynapses(IEnumerable<Synapse> newSynapses)
+        {
+            Synapses = Synapses.Concat(newSynapses).Distinct();
+        }
+
         /// <summary>
         /// segmentActive(s, t, state)
         ///     This routine returns true if the number of connected synapses on segment s that are active due 

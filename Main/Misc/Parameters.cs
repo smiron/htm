@@ -32,6 +32,12 @@ namespace Main.Misc
             set;
         }
 
+        public double InitialPermanence
+        {
+            get;
+            set;
+        }
+
         public int MinOverlap
         {
             get;
@@ -80,7 +86,8 @@ namespace Main.Misc
 
         public Parameters(float minPermanence, int minOverlap, int desiredLocalActivity,
             double permanenceInc, double permanenceDec, int columnActivityHistorySize,
-            int columnCountWidth, int columnCountHeight, int numberOfCellsPerColumn, int activationThreshold)
+            int columnCountWidth, int columnCountHeight, int numberOfCellsPerColumn,
+            int activationThreshold, double initialPermanence)
         {
             MinPermanence = minPermanence;
             PermanenceInc = permanenceInc;
@@ -92,6 +99,7 @@ namespace Main.Misc
             ColumnCountHeight = columnCountHeight;
             NumberOfCellsPerColumn = numberOfCellsPerColumn;
             ActivationThreshold = activationThreshold;
+            InitialPermanence = initialPermanence;
         }
 
         #endregion

@@ -28,14 +28,21 @@ namespace Main.Temporal
             private set;
         }
 
+        public Segment Segment
+        {
+            get;
+            private set;
+        }
+
         #endregion
 
         #region Instance
 
-        public SegmentUpdate(Cell cell, IEnumerable<Synapse> activeSynapses)
+        public SegmentUpdate(Cell cell, Segment segment, IEnumerable<Synapse> activeSynapses)
         {
             Cell = cell;
             ActiveSynapses = activeSynapses;
+            Segment = segment;
         }
 
         #endregion
