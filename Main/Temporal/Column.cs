@@ -172,7 +172,10 @@ namespace Main.Temporal
                         var activeUpdate = GetSegmentActiveSynapses(segment, cell, Time.Now, false);
                         _segmentUpdateList.Add(activeUpdate);
 
-                        var predSegment = GetBestMatchingSegment(cell, Time.Prev);
+                        int score;
+                        Segment predSegment;
+                        GetBestMatchingSegment(cell, Time.Prev, out predSegment, out score);
+
                         var predUpdate = GetSegmentActiveSynapses(predSegment, cell, Time.Prev, true);
 
                         _segmentUpdateList.Add(predUpdate);
@@ -270,12 +273,14 @@ namespace Main.Temporal
         /// </summary>
         /// <param name="cell"></param>
         /// <param name="time"></param>
-        /// <returns></returns>
-        private Segment GetBestMatchingSegment(Cell cell, Time time)
+        private void GetBestMatchingSegment(Cell cell, Time time, out Segment segmentFound, out int score)
         {
-            return cell.Segments
-                .Select(segment => 
-                    new 
+            segmentFound = null;
+            score = int.MinValue;
+
+            var segmentWithScore = cell.Segments
+                .Select(segment =>
+                    new
                     {
                         Segment = segment,
                         Score = segment.GetIsSegmentActiveScore
@@ -283,13 +288,51 @@ namespace Main.Temporal
                             Network.Instance.Parameters.AbsoluteMinPermanence,
                             Network.Instance.Parameters.MinActivationThreshold)
                     })
-                .Where(item => item.Score >= 0).OrderByDescending(item => item.Score)
-                .Select(item => item.Segment).FirstOrDefault();
+                .Where(item => item.Score >= 0).
+                OrderByDescending(item => item.Score).FirstOrDefault();
+
+            if (segmentWithScore != null)
+            {
+                segmentFound = segmentWithScore.Segment;
+                score = segmentWithScore.Score;
+            }
         }
 
-        private void CalculateBestMatchingCellAndSegment(Time time, out Cell cell, out Segment segment)
+        /// <summary>
+        /// getBestMatchingCell(c)
+        ///     For the given column, return the cell with the best matching segment (as defined above). 
+        ///     If no cell has a matching segment, then return the cell with the fewest number of segments.
+        /// </summary>
+        /// <param name="time"></param>
+        /// <param name="cell"></param>
+        /// <param name="segment"></param>
+        private void CalculateBestMatchingCellAndSegment(Time time, out Cell foundCell, out Segment foundSegment)
         {
-            throw new NotImplementedException();
+            var foundItem = Cells.Select
+                (cell =>
+                {
+                    Segment segment;
+                    int score;
+                    GetBestMatchingSegment(cell, time, out segment, out score);
+
+                    return new
+                    {
+                        Cell = cell,
+                        Segment = segment,
+                        SegmentScore = score
+                    };
+                }).OrderByDescending(item => item.SegmentScore).FirstOrDefault();
+
+            if (foundItem == null)
+            {
+                foundCell = Cells.OrderBy(cell => cell.Segments.Count()).First();
+                foundSegment = null;
+            }
+            else
+            {
+                foundCell = foundItem.Cell;
+                foundSegment = foundItem.Segment;
+            }
         }
 
         private SegmentUpdate GetSegmentActiveSynapses(Segment segment, Cell cell, Time time, bool newSynapses = false)
