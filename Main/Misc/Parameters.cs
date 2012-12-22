@@ -98,6 +98,12 @@ namespace Main.Misc
             set;
         }
 
+        public int NewSynapseCount
+        {
+            get;
+            set;
+        }
+
         #endregion
 
         #region Instance
@@ -106,7 +112,7 @@ namespace Main.Misc
             double permanenceInc, double permanenceDec, int columnActivityHistorySize,
             int columnCountWidth, int columnCountHeight, int numberOfCellsPerColumn,
             int activationThreshold, double initialPermanence, double absoluteMinPermanence,
-            int minActivationThreshold)
+            int minActivationThreshold, int newSynapseCount)
         {
             MinPermanence = minPermanence;
             PermanenceInc = permanenceInc;
@@ -121,6 +127,7 @@ namespace Main.Misc
             InitialPermanence = initialPermanence;
             AbsoluteMinPermanence = absoluteMinPermanence;
             MinActivationThreshold = minActivationThreshold;
+            NewSynapseCount = newSynapseCount;
         }
 
         #endregion

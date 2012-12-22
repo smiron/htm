@@ -335,9 +335,46 @@ namespace Main.Temporal
             }
         }
 
+        /// <summary>
+        /// getSegmentActiveSynapses(c, i, t, s, newSynapses= false)
+        ///         Return a segmentUpdate data structure containing a list of proposed changes to segment s. 
+        ///     Let activeSynapses be the list of active synapses where the originating cells have their 
+        ///     activeState output = 1 at time step t. (This list is empty if s = -1 since the segment doesn't exist.) 
+        ///         newSynapses is an optional argument that defaults to false. If newSynapses is true, 
+        ///     then newSynapseCount - count(activeSynapses) synapses are added to activeSynapses. 
+        ///     These synapses are randomly chosen from the set of cells that have learnState output = 1 at time step t.
+        /// </summary>
+        /// <param name="segment"></param>
+        /// <param name="cell"></param>
+        /// <param name="time"></param>
+        /// <param name="newSynapses"></param>
+        /// <returns></returns>
         private SegmentUpdate GetSegmentActiveSynapses(Segment segment, Cell cell, Time time, bool newSynapses = false)
         {
-            throw new NotImplementedException();
+            IEnumerable<Synapse> activeSynapses = null;
+
+            if (segment != null)
+            {
+                activeSynapses = segment.Synapses.Where(synapse => synapse.GetIsActive(ActiveMode.ActiveState, time)).ToArray();
+            }
+
+            activeSynapses = activeSynapses ?? Enumerable.Empty<Synapse>();
+
+            if (newSynapses
+                && Network.Instance.Parameters.NewSynapseCount - activeSynapses.Count() > 0)
+            {
+                var potentialSynapses = 
+                    Cells.Where(c => c.GetIsLearningState(time)
+                                     && c != cell)
+                         .SelectMany(c => c.Segments.SelectMany(s => s.Synapses))
+                         .Except(cell.Segments.SelectMany(c => c.Synapses));
+
+                activeSynapses = activeSynapses.Concat
+                    (potentialSynapses.OrderBy(ps => Guid.NewGuid())
+                    .Take(Network.Instance.Parameters.NewSynapseCount - activeSynapses.Count()));
+            }
+
+            return new SegmentUpdate(cell, segment, activeSynapses);
         }
 
         #endregion

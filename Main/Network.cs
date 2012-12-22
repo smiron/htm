@@ -64,7 +64,7 @@ namespace Main
             float minPermanence, int minOverlap, int desiredLocalActivity,
             double permanenceInc, double permanenceDec, int columnActivityHistorySize,
             int numberOfCellsPerColumn, int activationThreshold, int initialPermanence,
-            double absoluteMinPermanence, int minActivationThreshold)
+            double absoluteMinPermanence, int minActivationThreshold, int newSynapseCount)
         {
             Input = input;
 
@@ -73,7 +73,7 @@ namespace Main
                 permanenceInc, permanenceDec, columnActivityHistorySize,
                 columnCountWidth, columnCountHeight, numberOfCellsPerColumn,
                 activationThreshold, initialPermanence, absoluteMinPermanence,
-                minActivationThreshold);
+                minActivationThreshold, newSynapseCount);
 
             m_spatialPooler = new SpatialPooler(input, Parameters);
         }
