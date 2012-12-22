@@ -22,17 +22,15 @@ namespace Main.Temporal
             set;
         }
 
-        public bool IsConnected
-        {
-            get
-            {
-                return Network.Instance.Parameters.MinPermanence <= Permanence;
-            }
-        }
-
         #endregion
 
         #region Methods
+
+        public bool IsConnected(double? minPermanence = null)
+        {
+            return Network.Instance.Parameters.MinPermanence
+                <= (minPermanence ?? Network.Instance.Parameters.MinPermanence);
+        }
 
         public void SetIsActive(ActiveMode mode, Time time, bool value)
         {

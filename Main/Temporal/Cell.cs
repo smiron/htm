@@ -71,7 +71,7 @@ namespace Main.Temporal
         {
             var orderedSegments = Segments.
                 Where(segment => segment.GetIsSegmentActive(mode, time)).
-                OrderBy(segment => segment.GetIsSegmentActiveScore(mode, time)).ToArray();
+                OrderByDescending(segment => segment.GetIsSegmentActiveScore(mode, time)).ToArray();
 
             var firstSequenceSegment = orderedSegments.FirstOrDefault(segment => segment.IsSequenceSegment);
 

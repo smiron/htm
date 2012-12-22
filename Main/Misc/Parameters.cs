@@ -20,6 +20,15 @@ namespace Main.Misc
             set;
         }
 
+        /// <summary>
+        /// Used in TemporalPooler.Column.GetBestMatchingSegment
+        /// </summary>
+        public double AbsoluteMinPermanence
+        {
+            get;
+            set;
+        }
+
         public double PermanenceInc
         {
             get;
@@ -80,6 +89,15 @@ namespace Main.Misc
             private set;
         }
 
+        /// <summary>
+        /// minThreshold used in TemporalPooler.Column.GetBestMatchingSegment
+        /// </summary>
+        public int MinActivationThreshold
+        {
+            get;
+            set;
+        }
+
         #endregion
 
         #region Instance
@@ -87,7 +105,8 @@ namespace Main.Misc
         public Parameters(float minPermanence, int minOverlap, int desiredLocalActivity,
             double permanenceInc, double permanenceDec, int columnActivityHistorySize,
             int columnCountWidth, int columnCountHeight, int numberOfCellsPerColumn,
-            int activationThreshold, double initialPermanence)
+            int activationThreshold, double initialPermanence, double absoluteMinPermanence,
+            int minActivationThreshold)
         {
             MinPermanence = minPermanence;
             PermanenceInc = permanenceInc;
@@ -100,6 +119,8 @@ namespace Main.Misc
             NumberOfCellsPerColumn = numberOfCellsPerColumn;
             ActivationThreshold = activationThreshold;
             InitialPermanence = initialPermanence;
+            AbsoluteMinPermanence = absoluteMinPermanence;
+            MinActivationThreshold = minActivationThreshold;
         }
 
         #endregion

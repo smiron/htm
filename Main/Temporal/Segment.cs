@@ -45,10 +45,12 @@ namespace Main.Temporal
             return GetIsSegmentActiveScore(mode, time) >= 0;
         }
 
-        public int GetIsSegmentActiveScore(ActiveMode mode, Time time)
+        public int GetIsSegmentActiveScore(ActiveMode mode, Time time,
+            double? minPermanence = null, int? activationThreshold = null)
         {
-            return Synapses.Count(synapse => synapse.IsConnected && synapse.GetIsActive(mode, time))
-                - Network.Instance.Parameters.ActivationThreshold;
+            return Synapses.Count(synapse => synapse.IsConnected(minPermanence)
+                                             && synapse.GetIsActive(mode, time))
+                - (activationThreshold ?? Network.Instance.Parameters.ActivationThreshold);
         }
 
         #endregion

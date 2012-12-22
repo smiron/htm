@@ -273,7 +273,18 @@ namespace Main.Temporal
         /// <returns></returns>
         private Segment GetBestMatchingSegment(Cell cell, Time time)
         {
-            throw new NotImplementedException();
+            return cell.Segments
+                .Select(segment => 
+                    new 
+                    {
+                        Segment = segment,
+                        Score = segment.GetIsSegmentActiveScore
+                            (ActiveMode.ActiveState, time,
+                            Network.Instance.Parameters.AbsoluteMinPermanence,
+                            Network.Instance.Parameters.MinActivationThreshold)
+                    })
+                .Where(item => item.Score >= 0).OrderByDescending(item => item.Score)
+                .Select(item => item.Segment).FirstOrDefault();
         }
 
         private void CalculateBestMatchingCellAndSegment(Time time, out Cell cell, out Segment segment)
